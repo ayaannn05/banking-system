@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import formatDateTime from "../utils/formatDateTime";
 import { toast } from "react-toastify";
+import Nav from "../components/Nav";
 
 export default function BankerDetailPage() {
   const { id } = useParams();
@@ -47,74 +48,120 @@ export default function BankerDetailPage() {
   }, [id]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1e293b] via-[#232a3e] to-[#181135] flex justify-center items-start py-12">
-      <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl p-8 border border-[#38bdf8]/20">
-        <button
-          onClick={() => navigate(-1)}
-          className="mb-6 px-5 py-2 text-white font-medium rounded-lg bg-gradient-to-r from-[#6366f1] to-[#38bdf8] shadow hover:scale-105 active:scale-95 transition"
-        >
-          ← Back
-        </button>
-        <h2 className="text-3xl font-extrabold mb-8 text-white tracking-tight">
-          Account Details
-        </h2>
-        {loading && (
-          <p className="text-blue-200 font-medium mb-4">Loading...</p>
-        )}
+    <div className="min-h-screen bg-gray-50">
+      <Nav />
 
-        {!loading && account && (
-          <div>
-            <div className="mb-8 bg-white/5 border border-[#38bdf8]/10 rounded-xl p-6 shadow">
-              <div className="text-xl font-semibold text-[#38bdf8] mb-1">
-                {account.userId?.username ||
-                  account.userId?.name ||
-                  account.userId?.email ||
-                  "Unknown user"}
+      <div className="pt-24 pb-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <button
+            onClick={() => navigate(-1)}
+            className="mb-6 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-gray-400 transition inline-flex items-center gap-2"
+          >
+            <span>←</span> Back
+          </button>
+
+          <h1 className="text-4xl font-bold text-gray-900 mb-8">
+            Account Details
+          </h1>
+
+          {loading && (
+            <p className="text-gray-500 font-medium mb-4">Loading...</p>
+          )}
+
+          {!loading && account && (
+            <div>
+              {/* Account Info Card */}
+              <div className="bg-gradient-to-br from-[#39b385] to-[#9be15d] rounded-3xl shadow-xl p-8 mb-8 text-white">
+                <div className="flex items-start justify-between mb-6">
+                  <div>
+                    <p className="text-white/80 text-sm mb-2">Account Holder</p>
+                    <h2 className="text-3xl font-bold mb-1">
+                      {account.userId?.username ||
+                        account.userId?.name ||
+                        account.userId?.email ||
+                        "Unknown user"}
+                    </h2>
+                    <p className="text-white/90">
+                      {account.userId?.email || ""}
+                    </p>
+                  </div>
+                  <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center text-4xl">
+                    {account.userId?.username?.charAt(0).toUpperCase() ||
+                      account.userId?.email?.charAt(0).toUpperCase() ||
+                      "U"}
+                  </div>
+                </div>
+                <div>
+                  <p className="text-white/80 text-sm mb-2">Current Balance</p>
+                  <p className="text-5xl font-bold">
+                    ₹ {account.balance.toLocaleString()}
+                  </p>
+                </div>
               </div>
-              <div className="text-blue-100 mb-2">
-                {account.userId?.email || ""}
-              </div>
-              <div>
-                <span className="text-blue-200">Current balance:</span>{" "}
-                <span className="font-bold text-lg text-white">
-                  ₹ {account.balance}
-                </span>
+
+              {/* Transactions */}
+              <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  Transaction History
+                </h3>
+
+                {!account.transactions || account.transactions.length === 0 ? (
+                  <div className="text-center py-12">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <span className="text-4xl">📋</span>
+                    </div>
+                    <p className="text-gray-500">
+                      No transactions for this account.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {account.transactions.map((t, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              t.type === "DEPOSIT"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            <span className="text-2xl font-bold">
+                              {t.type === "DEPOSIT" ? "+" : "-"}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900">{t.type}</p>
+                            <p className="text-sm text-gray-500">
+                              {formatDateTime(
+                                t.createdAt || t.date || Date.now()
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <p
+                          className={`text-xl font-bold ${
+                            t.type === "DEPOSIT"
+                              ? "text-green-700"
+                              : "text-yellow-700"
+                          }`}
+                        >
+                          {t.type === "DEPOSIT" ? "+" : "-"}₹{" "}
+                          {t.amount.toLocaleString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-white">Transactions</h3>
-            {!account.transactions || account.transactions.length === 0 ? (
-              <p className="text-blue-200">No transactions for this account.</p>
-            ) : (
-              <ul className="space-y-3">
-                {account.transactions.map((t, idx) => (
-                  <li
-                    key={idx}
-                    className="flex justify-between rounded-xl p-4 bg-[#232a3e]/60 border border-[#38bdf8]/10 items-center"
-                  >
-                    <div>
-                      <div className="font-bold text-white">{t.type}</div>
-                      <div className="text-sm text-blue-200">
-                        {formatDateTime(t.createdAt || t.date || Date.now())}
-                      </div>
-                    </div>
-                    <div
-                      className={`font-extrabold text-lg
-                        ${
-                          t.type === "DEPOSIT"
-                            ? "text-[#15d4bc]"
-                            : "text-[#a694fa]"
-                        }
-                      `}
-                    >
-                      {t.type === "DEPOSIT" ? "+" : "-"}₹ {t.amount}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
 }
+

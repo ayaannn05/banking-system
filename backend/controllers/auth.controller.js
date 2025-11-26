@@ -76,7 +76,9 @@ export const signIn = async (req, res) => {
     if (role && user.role !== role) {
       return res
         .status(403)
-        .json({ message: `User is not authorized as role '${role}'` });
+        .json({
+          message: `This is ${role} login only. ${role}s can log in here. Please use the correct login page.`,
+        });
     }
     const accessToken = generateAccessToken36();
     const tokenExpiresAt = new Date();

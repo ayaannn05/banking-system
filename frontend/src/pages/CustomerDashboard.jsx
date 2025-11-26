@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import formatDateTime from "../utils/formatDateTime";
 import { toast } from "react-toastify";
+import Nav from "../components/Nav";
 
 function CustomerDashboard() {
   const serverUrl = "http://localhost:8000";
@@ -144,107 +145,129 @@ function CustomerDashboard() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-[#1e293b] via-[#232a3e] to-[#181135] flex justify-center items-start py-12">
-        <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-xl border border-[#38bdf8]/20 rounded-2xl shadow-2xl p-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-4xl font-extrabold text-white tracking-tight">
-              Customer Dashboard
-            </h2>
-            <button
-              onClick={handleSignOut}
-              disabled={loading}
-              className={`px-4 py-2 rounded bg-[#ff4d2d] text-white font-semibold hover:bg-[#e64323] transition ${
-                loading ? "opacity-60 cursor-not-allowed" : ""
-              }`}
-            >
-              Sign Out
-            </button>
-          </div>
+      <div className="min-h-screen bg-gray-50">
+        <Nav />
 
-          {/* Balance Card */}
-          <div className="mb-8 flex flex-col items-center">
-            <span className="text-blue-200 text-base mb-1">
-              Current balance
-            </span>
-            <span className="text-5xl font-semibold text-[#38bdf8] drop-shadow">
-              {balance !== null ? `₹ ${balance}` : "-"}
-            </span>
-          </div>
-
-          {/* Deposit / Withdraw Card */}
-          <div className="mb-8 bg-white/10 rounded-xl p-6 flex flex-col items-center shadow border border-[#38bdf8]/10">
-            <div className="text-blue-100 font-semibold mb-2">
-              Quick Actions
-            </div>
-            <div className="flex space-x-4">
+        <div className="pt-24 pb-20 px-6">
+          <div className="max-w-6xl mx-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                  Customer Dashboard
+                </h1>
+                <p className="text-gray-600">
+                  Manage your account and transactions
+                </p>
+              </div>
               <button
-                onClick={() => openModal("deposit")}
-                className="px-6 py-2 font-bold rounded-lg bg-gradient-to-r from-[#15d4bc] to-[#38bdf8] text-white shadow hover:scale-105 active:scale-95 transition text-base"
+                onClick={handleSignOut}
                 disabled={loading}
+                className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-red-400 hover:text-red-600 transition disabled:opacity-60"
               >
-                Deposit
-              </button>
-              <button
-                onClick={() => openModal("withdraw")}
-                className="px-6 py-2 font-bold rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a694fa] text-white shadow hover:scale-105 active:scale-95 transition text-base"
-                disabled={loading}
-              >
-                Withdraw
+                Sign Out
               </button>
             </div>
-          </div>
 
-          {/* Transactions Card */}
-          <div className="bg-white/10 rounded-xl p-6 shadow-md border border-[#38bdf8]/10">
-            <h3 className="text-2xl font-semibold mb-4 text-white">
-              Transactions
-            </h3>
-            {transactions.length === 0 ? (
-              <p className="text-blue-200">No transactions yet.</p>
-            ) : (
-              <ul className="space-y-3">
-                {transactions.map((t, idx) => (
-                  <li
-                    key={idx}
-                    className="flex justify-between rounded-xl p-4 bg-[#232a3e]/60 border border-[#38bdf8]/10 items-center"
-                  >
-                    <div>
-                      <div className="font-bold text-white">{t.type}</div>
-                      <div className="text-sm text-blue-200">
-                        {formatDateTime(t.date || t.createdAt || Date.now())}
-                      </div>
-                    </div>
+            {/* Balance Card */}
+            <div className="bg-gradient-to-br from-[#39b385] to-[#9be15d] rounded-3xl shadow-xl p-8 mb-8 text-white">
+              <p className="text-white/80 text-sm font-medium mb-2">
+                Total Balance
+              </p>
+              <p className="text-5xl font-bold mb-6">
+                {balance !== null ? `₹ ${balance.toLocaleString()}` : "-"}
+              </p>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <button
+                  onClick={() => openModal("deposit")}
+                  disabled={loading}
+                  className="flex-1 bg-white text-green-700 font-bold py-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
+                >
+                  💰 Deposit
+                </button>
+                <button
+                  onClick={() => openModal("withdraw")}
+                  disabled={loading}
+                  className="flex-1 bg-white/20 backdrop-blur-sm text-white font-bold py-4 rounded-xl border-2 border-white/30 hover:bg-white/30 hover:scale-[1.02] transition disabled:opacity-60"
+                >
+                  💸 Withdraw
+                </button>
+              </div>
+            </div>
+
+            {/* Transactions */}
+            <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Recent Transactions
+              </h2>
+
+              {transactions.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-4xl">📊</span>
+                  </div>
+                  <p className="text-gray-500">No transactions yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {transactions.map((t, idx) => (
                     <div
-                      className={`font-extrabold text-lg
-                        ${
-                          t.type === "DEPOSIT"
-                            ? "text-[#15d4bc]"
-                            : "text-[#a694fa]"
-                        }
-                      `}
+                      key={idx}
+                      className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:shadow-md transition"
                     >
-                      {t.type === "DEPOSIT" ? "+" : "-"}₹ {t.amount}
+                      <div className="flex items-center gap-4">
+                        <div
+                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            t.type === "DEPOSIT"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          }`}
+                        >
+                          <span className="text-2xl font-bold">
+                            {t.type === "DEPOSIT" ? "+" : "-"}
+                          </span>
+                        </div>
+                        <div>
+                          <p className="font-bold text-gray-900">{t.type}</p>
+                          <p className="text-sm text-gray-500">
+                            {formatDateTime(
+                              t.date || t.createdAt || Date.now()
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                      <p
+                        className={`text-xl font-bold ${
+                          t.type === "DEPOSIT"
+                            ? "text-green-700"
+                            : "text-yellow-700"
+                        }`}
+                      >
+                        {t.type === "DEPOSIT" ? "+" : "-"}₹{" "}
+                        {t.amount.toLocaleString()}
+                      </p>
                     </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
       {/* Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/60" onClick={closeModal} />
-          <div className="relative bg-[#0b1220] p-6 rounded-xl w-full max-w-md border border-[#38bdf8]/20">
-            <h3 className="text-xl font-bold text-white mb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
               {modalType === "deposit" ? "Deposit Funds" : "Withdraw Funds"}
             </h3>
-            <p className="text-blue-200 mb-4">
+            <p className="text-gray-600 mb-6">
               Available balance:{" "}
-              <span className="font-semibold text-white">
-                {balance !== null ? `₹ ${balance}` : "-"}
+              <span className="font-bold text-gray-900">
+                {balance !== null ? `₹ ${balance.toLocaleString()}` : "-"}
               </span>
             </p>
             <input
@@ -252,23 +275,24 @@ function CustomerDashboard() {
               min="1"
               value={modalAmount}
               onChange={(e) => setModalAmount(e.target.value)}
-              className="w-full px-4 py-3 rounded-lg bg-transparent border border-[#38bdf8]/30 text-white mb-4"
+              className="w-full px-4 py-4 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 text-lg focus:outline-none focus:border-green-500 transition mb-6"
               placeholder="Enter amount"
+              autoFocus
             />
-            <div className="flex justify-end space-x-3">
+            <div className="flex gap-3">
               <button
                 onClick={closeModal}
-                className="px-4 py-2 rounded bg-white/10 text-white"
+                className="flex-1 px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition"
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
                 onClick={confirmModal}
-                className="px-4 py-2 rounded bg-gradient-to-r from-[#15d4bc] to-[#38bdf8] text-white font-semibold"
+                className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
                 disabled={loading}
               >
-                Confirm
+                {loading ? "Processing..." : "Confirm"}
               </button>
             </div>
           </div>

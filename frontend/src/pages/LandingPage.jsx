@@ -1,102 +1,208 @@
 import { useNavigate } from "react-router-dom";
+import Nav from "../components/Nav";
 
 export default function LandingPage() {
   const navigate = useNavigate();
   return (
-    <div className="min-h-screen w-full flex flex-col bg-gradient-to-br from-[#1e293b] via-[#232a3e] to-[#181135] text-white font-sans relative">
-      {/* App Bar */}
-      <header className="flex items-center px-8 py-7">
-        {/* Logo - SVG Circle with Bank Icon */}
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6366f1] to-[#38bdf8] flex items-center justify-center shadow-lg">
-            {/* SVG Bank Icon */}
-            <svg width="30" height="30" viewBox="0 0 48 48" fill="none">
-              <circle cx="24" cy="24" r="18" fill="#fff" opacity="0.19" />
-              <rect x="14" y="22" width="20" height="9" rx="3" fill="#6366f1" />
-              <rect
-                x="18"
-                y="13"
-                width="12"
-                height="7"
-                rx="2.5"
-                fill="#38bdf8"
-              />
-              <rect x="21" y="31" width="6" height="4" rx="2" fill="#6366f1" />
-            </svg>
-          </div>
-          <span className="text-white font-bold text-2xl tracking-tight ml-1">
-            Bankon
-          </span>
-        </div>
-      </header>
+    <div className="w-full bg-white">
+      <Nav showAuthButtons={true} />
 
-      {/* Main Section */}
-      <main className="flex flex-row justify-between items-center flex-grow px-16">
-        {/* Left Column */}
-        <section className="max-w-xl">
-          <span className="inline-block px-4 py-1 rounded-full bg-[#15d4bc]/20 text-[#15d4bc] text-sm font-semibold mb-5 shadow">
-            Welcome to Online Banking
-          </span>
-          <h1 className="text-white text-4xl lg:text-6xl font-extrabold mb-4">
-            Next-Gen Banking, <span className="text-[#38bdf8]">Secure</span>{" "}
-            <br />& <span className="text-[#a694fa]">Instant</span>
-          </h1>
-          <p className="text-blue-200 text-lg mb-9 max-w-md">
-            Move money, manage accounts, control transactions from anywhere.
-            Secure, real-time, and trusted by thousands of customers.
-          </p>
-          <div className="flex gap-5 mt-4">
-            <button
-              onClick={() =>
-                navigate("/login", { state: { role: "customer" } })
-              }
-              className="px-6 py-3 bg-gradient-to-r from-[#15d4bc] to-[#38bdf8] text-white font-bold rounded-xl shadow-lg hover:scale-105 active:scale-95 transition text-lg"
-            >
-              Customer Login
-            </button>
-            <button
-              onClick={() => navigate("/login", { state: { role: "banker" } })}
-              className="px-6 py-3 bg-gradient-to-r from-[#6366f1] to-[#a694fa] text-white font-bold rounded-xl shadow-lg hover:scale-105 active:scale-95 transition text-lg"
-            >
-              Banker Login
-            </button>
-          </div>
-        </section>
-        {/* Right Side Wallet Card */}
-        <section className="mx-8 flex-grow flex items-center justify-center">
-          <div className="w-full max-w-xs bg-[#232a3e]/80 backdrop-blur-lg rounded-2xl shadow-2xl p-7 border border-[#38bdf8]/10">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <div className="text-white font-semibold text-lg">
-                  Secure Wallet
-                </div>
-                <div className="text-blue-200 text-xs">
-                  Protected with bank-level encryption.
-                </div>
+      {/* Hero Section - 100vh */}
+      <section className="mt-10 h-[70vh] flex items-center justify-center px-6 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            {/* Left Column - Content */}
+            <div className="space-y-8">
+              <div className="inline-block px-5 py-2 rounded-full bg-[var(--color-primary-opacity)] border border-[var(--color-primary)] text-[var(--color-primary-darker)] text-sm font-semibold animate-fade-in">
+                Welcome to Modern Banking
               </div>
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-lg bg-[#d9f99d] text-[#166534] font-extrabold shadow text-2xl">
-                💳
+
+              <h1 className="text-6xl lg:text-7xl font-extrabold text-gray-900 leading-tight">
+                Banking Made{" "}
+                <span className="bg-gradient-to-r from-[#39b385] to-[#9be15d] bg-clip-text text-transparent">
+                  Simple
+                </span>
+              </h1>
+
+              <p className="text-2xl text-gray-600 leading-relaxed max-w-xl">
+                Everything you need in a modern banking app. Fast, secure, and
+                designed for your financial freedom.
+              </p>
+
+              <div className="flex flex-wrap gap-5 pt-6">
+                <button
+                  onClick={() =>
+                    navigate("/login", { state: { role: "customer" } })
+                  }
+                  className="px-10 py-5 bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-300"
+                >
+                  Customer Login →
+                </button>
+                <button
+                  onClick={() =>
+                    navigate("/login", { state: { role: "banker" } })
+                  }
+                  className="px-10 py-5 bg-white text-gray-700 font-bold text-lg rounded-full border-2 border-gray-300 hover:border-[var(--color-primary)] hover:text-[var(--color-primary-darker)] hover:scale-105 transition-all duration-300"
+                >
+                  Banker Login
+                </button>
               </div>
             </div>
+
+            {/* Right Column - Card */}
+            <div className="flex items-center justify-center">
+              <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-shadow duration-300 transform hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <h3 className="text-gray-900 font-bold text-2xl mb-2">
+                      Digital Wallet
+                    </h3>
+                    <p className="text-gray-500">Secure & Protected</p>
+                  </div>
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg animate-pulse">
+                    <span className="text-4xl">💳</span>
+                  </div>
+                </div>
+
+                <div className="mb-8">
+                  <p className="text-gray-500 text-sm mb-2">Total Balance</p>
+                  <p className="text-5xl font-bold text-gray-900">₹12,450.00</p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-5">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 border border-green-200">
+                    <p className="text-gray-600 text-xs mb-2 font-semibold">
+                      Transactions
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900">1,234</p>
+                  </div>
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-6 border border-blue-200">
+                    <p className="text-gray-600 text-xs mb-2 font-semibold">
+                      Customers
+                    </p>
+                    <p className="text-3xl font-bold text-gray-900">8,921</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section - 70vh */}
+      <section className="h-[60vh] flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white px-6">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl font-extrabold text-gray-900 mb-4">
+              Why Choose Bankist?
+            </h2>
+            <p className="text-2xl text-gray-600">
+              Everything you need for modern banking
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-10">
+            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-4xl">⚡</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Instant Transfers
+              </h3>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Send and receive money instantly with zero fees. Real-time
+                processing for all your transactions.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ffb003] to-[#ffcb03] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-4xl">🔒</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Bank-Level Security
+              </h3>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Your money is protected with industry-leading encryption and
+                multi-factor authentication.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
+              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff585f] to-[#fd424b] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-4xl">📊</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Real-Time Analytics
+              </h3>
+              <p className="text-gray-600 text-lg leading-relaxed">
+                Track your spending and savings with detailed insights and smart
+                financial reports.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - 30vh */}
+      <footer className="h-[40vh] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center px-6">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Logo & About */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-2xl">B</span>
+                </div>
+                <span className="text-3xl font-bold">Bankist</span>
+              </div>
+              <p className="text-gray-400 max-w-md text-lg">
+                Modern banking made simple. Secure, fast, and designed for your
+                financial freedom.
+              </p>
+            </div>
+
+            {/* Quick Links */}
             <div>
-              <div className="text-blue-100 text-xs mb-1">Balance</div>
-              <div className="text-white text-2xl font-bold">$12,450.00</div>
-              <div className="mt-5 grid grid-cols-2 gap-4">
-                <div className="bg-[#181135]/50 rounded-lg p-4 text-sm text-white flex flex-col items-start shadow">
-                  <span className="text-blue-300 text-xs mb-1">
-                    Transactions
-                  </span>
-                  <span className="font-semibold">1,234</span>
-                </div>
-                <div className="bg-[#181135]/50 rounded-lg p-4 text-sm text-white flex flex-col items-start shadow">
-                  <span className="text-blue-300 text-xs mb-1">Customers</span>
-                  <span className="font-semibold">8,921</span>
-                </div>
-              </div>
+              <h4 className="font-bold text-xl mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  About Us
+                </li>
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  Services
+                </li>
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  Contact
+                </li>
+              </ul>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h4 className="font-bold text-xl mb-4">Legal</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  Privacy Policy
+                </li>
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  Terms of Service
+                </li>
+                <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
+                  Security
+                </li>
+              </ul>
             </div>
           </div>
-        </section>
-      </main>
+
+          {/* Copyright */}
+          <div className="border-t border-gray-700 pt-6 text-center">
+            <p className="text-gray-400">
+              © 2025 Bankist. All rights reserved. | Built by Ayaan Ansari
+            </p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
