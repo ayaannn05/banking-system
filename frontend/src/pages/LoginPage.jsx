@@ -16,7 +16,7 @@ function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [err, setErr] = useState("");
+  
   const serverUrl = "http://localhost:8000";
   const location = useLocation();
   const initialRole = location?.state?.role || "customer";
@@ -29,7 +29,7 @@ function LoginPage() {
         { email, password, role },
         { withCredentials: true }
       );
-      setErr("");
+
       toast.success("Login successful!");
 
       const { accessToken, role: userRole } = result.data || {};
@@ -46,8 +46,8 @@ function LoginPage() {
     } catch (err) {
       const message =
         err?.response?.data?.message || err?.message || "An error occurred";
-      setErr(message);
-        toast.error(message);
+
+      toast.error(message);
     }
   };
 

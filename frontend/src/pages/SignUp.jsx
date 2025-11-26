@@ -21,7 +21,7 @@ function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [err, setErr] = useState("");
+
 
   const serverURL = "http://localhost:8000";
 
@@ -37,13 +37,12 @@ function SignUp() {
         },
         { withCredentials: true }
       );
-      setErr("");
+
       toast.success("Sign up successful! Please log in.");
 
       // You might want to redirect to dashboard or login here
       navigate("/login", { state: { role } });
     } catch (err) {
-      setErr(err.response?.data?.message || err.message);
       toast.error(err.response?.data?.message || "Sign up failed");
     }
   };

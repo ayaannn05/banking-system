@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import formatDateTime from "../utils/formatDateTime";
-
+import { toast } from "react-toastify";
 function BankerDashboard() {
   const serverUrl = "http://localhost:8000";
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
+
   const navigate = useNavigate();
 
   const getAuthHeaders = () => {
@@ -17,7 +17,7 @@ function BankerDashboard() {
 
   const fetchAccounts = async () => {
     setLoading(true);
-    setErr("");
+
     try {
       const res = await axios.get(`${serverUrl}/api/banker/accounts`, {
         headers: getAuthHeaders(),
@@ -29,7 +29,7 @@ function BankerDashboard() {
         navigate("/login", { replace: true });
         return;
       }
-      setErr(
+      toast.error(
         error?.response?.data?.message ||
           error.message ||
           "Failed to load accounts"
@@ -41,7 +41,7 @@ function BankerDashboard() {
 
   const handleSignOut = async () => {
     setLoading(true);
-    setErr("");
+
     try {
       await axios.post(
         `${serverUrl}/api/auth/signout`,
@@ -50,7 +50,7 @@ function BankerDashboard() {
       );
     } catch (error) {
       if (error?.response?.status !== 401) {
-        setErr(
+        toast.error(
           error?.response?.data?.message ||
             error.message ||
             "Failed to sign out"
@@ -94,7 +94,6 @@ function BankerDashboard() {
         {loading && (
           <p className="text-blue-200 font-medium mb-4">Loading...</p>
         )}
-        {err && <p className="text-red-400 font-semibold mb-4">{err}</p>}
 
         <div className="space-y-6">
           {accounts.length === 0 ? (

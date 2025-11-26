@@ -10,7 +10,7 @@ function CustomerDashboard() {
   const [balance, setBalance] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState("");
-  const [err, setErr] = useState("");
+
   const [loading, setLoading] = useState(false);
 
   const getAuthHeaders = () => {
@@ -20,7 +20,7 @@ function CustomerDashboard() {
 
   const fetchTransactions = async () => {
     setLoading(true);
-    setErr("");
+
     try {
       const res = await axios.get(`${serverUrl}/api/customer/transactions`, {
         headers: getAuthHeaders(),
@@ -34,12 +34,6 @@ function CustomerDashboard() {
         return;
       }
       toast.error("Failed to load transactions");
-      setErr(
-        // setErr(
-        error?.response?.data?.message ||
-          error.message ||
-          "Failed to load transactions"
-      );
     } finally {
       setLoading(false);
     }
@@ -47,7 +41,7 @@ function CustomerDashboard() {
 
   const handleSignOut = async () => {
     setLoading(true);
-    setErr("");
+
     try {
       await axios.post(
         `${serverUrl}/api/auth/signout`,
@@ -59,8 +53,7 @@ function CustomerDashboard() {
       if (error?.response?.status === 401) {
         // token invalid or expired, continue to clear local state
       } else {
-        toast.error("Failed to sign out");
-        setErr(
+        toast.error(
           error?.response?.data?.message ||
             error.message ||
             "Failed to sign out"
@@ -86,10 +79,10 @@ function CustomerDashboard() {
   const postAction = async (path) => {
     const value = Number(amount);
     if (!value || value <= 0) {
-      setErr("Enter a valid amount greater than zero");
+      toast.error("Enter a valid amount greater than zero");
       return;
     }
-    setErr("");
+
     setLoading(true);
     try {
       const res = await axios.post(
@@ -109,9 +102,6 @@ function CustomerDashboard() {
         return;
       }
       toast.error(error?.response?.data?.message || `Failed to ${path}`);
-      setErr(
-        error?.response?.data?.message || error.message || `Failed to ${path}`
-      );
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import formatDateTime from "../utils/formatDateTime";
+import { toast } from "react-toastify";
 
 export default function BankerDetailPage() {
   const { id } = useParams();
@@ -10,7 +11,6 @@ export default function BankerDetailPage() {
 
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState("");
 
   const getAuthHeaders = () => {
     const token = localStorage.getItem("accessToken");
@@ -21,7 +21,7 @@ export default function BankerDetailPage() {
     if (!id) return navigate("/banker-dashboard");
     const fetchDetail = async () => {
       setLoading(true);
-      setErr("");
+
       try {
         const res = await axios.get(
           `${serverUrl}/api/banker/accounts/${id}/transactions`,
@@ -33,7 +33,7 @@ export default function BankerDetailPage() {
           navigate("/login", { replace: true });
           return;
         }
-        setErr(
+        toast.error(
           error?.response?.data?.message ||
             error.message ||
             "Failed to load account details"
@@ -61,7 +61,6 @@ export default function BankerDetailPage() {
         {loading && (
           <p className="text-blue-200 font-medium mb-4">Loading...</p>
         )}
-        {err && <p className="text-red-400 font-semibold mb-4">{err}</p>}
 
         {!loading && account && (
           <div>
