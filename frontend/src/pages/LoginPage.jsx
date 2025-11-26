@@ -1,15 +1,16 @@
 import axios from "axios";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
-  const primaryColor = "#ff4d2d";
-  //   const hoverColor = "#e64323";
-  const bgColor = "#fff9f6";
-  const borderColor = "#ddd";
+  // Brand colors
+  const PRIMARY_GRAD = "linear-gradient(90deg, #38bdf8 0%, #6366f1 100%)"; // Matches landing page
+  const BG_GRAD =
+    "linear-gradient(120deg, #1e293b 0%, #232a3e 80%, #181135 100%)";
+  const CARD_BG = "rgba(30,41,59,0.75)"; // Glass effect color
+
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -24,69 +25,61 @@ function LoginPage() {
     try {
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
-        {
-          email,
-          password,
-          role,
-        },
+        { email, password, role },
         { withCredentials: true }
       );
       setErr("");
-      // Save token and role, then redirect based on role
+
       const { accessToken, role: userRole } = result.data || {};
       if (accessToken) {
-        try {
-          localStorage.setItem("accessToken", accessToken);
-        } catch (e) {
-          console.warn("Could not save accessToken", e);
-        }
+        localStorage.setItem("accessToken", accessToken);
       }
       if (userRole) {
-        try {
-          localStorage.setItem("role", userRole);
-        } catch (e) {
-          console.warn("Could not save role", e);
-        }
+        localStorage.setItem("role", userRole);
       }
-
-      if (userRole === "banker") {
-        navigate("/banker-dashboard", { replace: true });
-      } else {
-        navigate("/customer-dashboard", { replace: true });
-      }
+      navigate(
+        userRole === "banker" ? "/banker-dashboard" : "/customer-dashboard",
+        { replace: true }
+      );
     } catch (err) {
-      // Use optional chaining and fallback so we don't throw when `err.response` is undefined
       const message =
         err?.response?.data?.message || err?.message || "An error occurred";
       setErr(message);
-      console.log(err?.response?.data || err.message);
     }
   };
 
   return (
     <div
-      className="min-h-screen w-full flex items-center justify-center p-4"
-      style={{ backgroundColor: bgColor }}
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ background: BG_GRAD }}
     >
       <div
-        className={`h-full bg-white rounded-xl shadow-lg w-full max-w-md p-8 border `}
-        style={{ border: `1px solid ${borderColor}` }}
+        className="w-full max-w-md rounded-2xl shadow-2xl p-8 border backdrop-blur-lg"
+        style={{
+          background: CARD_BG,
+          border: "1px solid rgba(99,102,241,0.12)",
+          boxShadow: "0 8px 44px 0 rgba(38,50,56,0.25)",
+        }}
       >
         <h1
-          className={`text-3xl font-bold mb-2 `}
-          style={{ color: primaryColor }}
+          className="text-3xl font-extrabold mb-3 text-center tracking-tight"
+          style={{
+            background: PRIMARY_GRAD,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
-          Feastly
+          {role === "banker" ? "Banker Login" : "Customer Login"}
         </h1>
-        <p className="text-gray-600 mb-8">
-          Sign In to your account to get started with delicious food deliveries
+        <p className="text-blue-200 mb-8 text-center text-base">
+          Sign in to your account and start modern banking in seconds.
         </p>
 
         {/* Email */}
-        <div className="mb-4">
+        <div className="mb-5">
           <label
             htmlFor="email"
-            className="block text-gray-700 font-medium mb-1"
+            className="block text-blue-100 font-medium mb-1"
           >
             Email
           </label>
@@ -95,59 +88,75 @@ function LoginPage() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full border rounded-lg px-3 py-2 focus:outline-none "
-            style={{ border: `1px solid ${borderColor}` }}
+            className="w-full border rounded-lg px-3 py-2 text-base bg-transparent text-white focus:outline-none focus:border-[#38bdf8] transition"
+            style={{ border: "1px solid rgba(99,102,241,0.27)" }}
             required
+            autoFocus
           />
         </div>
 
         {/* Password */}
-        <div className="mb-4">
+        <div className="mb-5">
           <label
             htmlFor="password"
-            className="block text-gray-700 font-medium mb-1"
+            className="block text-blue-100 font-medium mb-1"
           >
             Password
           </label>
           <div className="relative">
             <input
-              type={`${showPassword ? "text" : "password"}`}
+              type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full border rounded-lg px-3 py-2 focus:outline-none "
-              style={{ border: `1px solid ${borderColor}` }}
+              className="w-full border rounded-lg px-3 py-2 text-base bg-transparent text-white focus:outline-none focus:border-[#38bdf8] transition"
+              style={{ border: "1px solid rgba(99,102,241,0.27)" }}
               required
             />
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="cursor-pointer absolute right-3 top-2.5 text-gray-500"
+              className="cursor-pointer absolute right-3 top-2.5 text-blue-200"
+              tabIndex={-1}
             >
-              {!showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+              {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
             </button>
           </div>
         </div>
 
-        {/* Forget Password */}
+        {/* Error */}
+        {err && <p className="text-red-400 text-center my-3 rounded">{err}</p>}
 
         {/* Sign In button */}
-
         <button
           type="button"
           onClick={handleSignIn}
-          className={`w-full font-semibold  py-2  rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer`}
+          className="w-full font-semibold py-2 rounded-xl mt-1 transition duration-200"
+          style={{
+            background: PRIMARY_GRAD,
+            color: "#fff",
+            boxShadow: "0 2px 20px 0 rgba(99,102,241,0.14)",
+          }}
         >
           Sign In
         </button>
-        {err && <p className="text-red-500 text-center my-4">{err}</p>}
-        {/* Sigin with google */}
 
-        <p className="cursor-pointer text-center mt-6">
-          Want to create a new account ?{" "}
+        {/* Sign in with Google */}
+        <button
+          type="button"
+          onClick={() => window.alert("Google Sign In - implement OAuth")}
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl mt-5 font-semibold bg-white text-[#232a3e] shadow hover:bg-[#f3f4f6] transition"
+        >
+          <FcGoogle className="text-xl" /> Sign in with Google
+        </button>
+
+        {/* Sign Up Link */}
+        <p className="text-center mt-7 text-blue-100 text-sm">
+          Want to create a new account?
           <span
             onClick={() => navigate("/signup", { state: { role } })}
-            className="text-[#ff4d2d]"
+            className="ml-2 font-semibold cursor-pointer"
+            style={{ color: "#38bdf8" }}
           >
             Sign Up
           </span>

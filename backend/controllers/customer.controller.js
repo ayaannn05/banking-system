@@ -1,12 +1,11 @@
 import Account from "../models/account.model.js";
-import mongoose from "mongoose";
+
 
 export const getTransactions = async (req, res) => {
   try {
     const userId = req.user._id;
     if (!userId) return res.status(400).json({ message: "Missing user id" });
 
-    // userId is already an ObjectId from the auth middleware, use directly
     const account = await Account.findOne({ userId: userId });
     if (!account) return res.json({ balance: 0, transactions: [] });
 
@@ -26,9 +25,10 @@ export const deposit = async (req, res) => {
     if (isNaN(amount) || amount <= 0)
       return res.status(400).json({ message: "Invalid deposit amount" });
 
+    // create account for user doing first deposit
+
     const account = await Account.findOne({ userId: userId });
     if (!account) {
-      // If account doesn't exist yet, create one with initial deposit
       const newAccount = new Account({
         userId: userId,
         balance: amount,
@@ -41,12 +41,20 @@ export const deposit = async (req, res) => {
       });
     }
 
+    // logic for add money to existing acc
+
     account.balance += amount;
     account.transactions.push({ type: "DEPOSIT", amount });
 
     await account.save();
 
-    res.json({ balance: account.balance, transactions: account.transactions });
+    // sorting for latest transactions first at frontend
+    res.json({
+      balance: account.balance,
+      transactions: account.transactions.sort(
+        (a, b) => b.createdAt - a.createdAt
+      ),
+    });
   } catch (error) {
     console.error("deposit error:", error);
     res.status(500).json({ message: "Server error during deposit" });
@@ -73,7 +81,12 @@ export const withdraw = async (req, res) => {
 
     await account.save();
 
-    res.json({ balance: account.balance, transactions: account.transactions });
+    res.json({
+      balance: account.balance,
+      transactions: account.transactions.sort(
+        (a, b) => b.createdAt - a.createdAt
+      ),
+    });
   } catch (error) {
     console.error("withdraw error:", error);
     res.status(500).json({ message: "Server error during withdrawal" });

@@ -7,7 +7,9 @@ export const signUp = async (req, res) => {
     const { username, email, password, role } = req.body;
     let user = await User.findOne({ email }).exec();
     if (user) {
-      return res.status(400).json({ message: "Email already in use" });
+      return res
+        .status(400)
+        .json({ message: "User found with same email / username" });
     }
     if (password.length < 6) {
       return res
@@ -37,16 +39,7 @@ export const signUp = async (req, res) => {
     await user.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    // Handle common expected errors with helpful messages
-    if (error.code === 11000) {
-      // duplicate key (unique index) error
-      return res.status(400).json({ message: "Email already in use" });
-    }
-    if (error.name === "ValidationError") {
-      return res.status(400).json({ message: error.message });
-    }
-    console.error("Signup error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Sign up failed" });
   }
 };
 
@@ -59,9 +52,9 @@ export const signIn = async (req, res) => {
     }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid password" });
     }
-    // If a role was provided in the signin request, ensure it matches the stored user role
+    // role for redirection to correct dashboard if customer rederirect to customer dashboard
     if (role && user.role !== role) {
       return res
         .status(403)
@@ -78,7 +71,7 @@ export const signIn = async (req, res) => {
     // Return access token along with the user's role so frontend can redirect appropriately
     res.json({ accessToken, role: user.role });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "SignIn failed" });
   }
 };
 
@@ -90,6 +83,6 @@ export const signOut = async (req, res) => {
     await user.save();
     res.json({ message: "Signed out successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "SignOut failed" });
   }
 };

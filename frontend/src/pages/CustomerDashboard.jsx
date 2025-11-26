@@ -27,7 +27,6 @@ function CustomerDashboard() {
       setBalance(res.data.balance);
       setTransactions(res.data.transactions || []);
     } catch (error) {
-      // If unauthorized, send user back to login
       if (error?.response?.status === 401) {
         navigate("/login", { replace: true });
         return;
@@ -39,6 +38,37 @@ function CustomerDashboard() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    setLoading(true);
+    setErr("");
+    try {
+      await axios.post(
+        `${serverUrl}/api/auth/signout`,
+        {},
+        { headers: getAuthHeaders(), withCredentials: true }
+      );
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        // token invalid or expired, continue to clear local state
+      } else {
+        setErr(
+          error?.response?.data?.message ||
+            error.message ||
+            "Failed to sign out"
+        );
+      }
+    } finally {
+      try {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("role");
+      } catch {
+        // ignore
+      }
+      setLoading(false);
+      navigate("/", { replace: true });
     }
   };
 
@@ -78,73 +108,104 @@ function CustomerDashboard() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4">Customer Dashboard</h2>
-
-      {loading && <p className="text-gray-600">Loading...</p>}
-      {err && <p className="text-red-500 mb-4">{err}</p>}
-
-      <div className="mb-6">
-        <p className="text-gray-700">Current balance:</p>
-        <p className="text-3xl font-semibold">
-          {balance !== null ? `₹ ${balance}` : "-"}
-        </p>
-      </div>
-
-      <div className="mb-6">
-        <label className="block mb-2">Amount</label>
-        <input
-          type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="border rounded px-3 py-2 w-48"
-          placeholder="Enter amount"
-        />
-        <div className="mt-3 space-x-3">
+    <div className="min-h-screen bg-gradient-to-br from-[#1e293b] via-[#232a3e] to-[#181135] flex justify-center items-start py-12">
+      <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-xl border border-[#38bdf8]/20 rounded-2xl shadow-2xl p-8">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-4xl font-extrabold text-white tracking-tight">
+            Customer Dashboard
+          </h2>
           <button
-            onClick={() => postAction("deposit")}
-            className="px-4 py-2 bg-green-500 text-white rounded"
+            onClick={handleSignOut}
             disabled={loading}
+            className={`px-4 py-2 rounded bg-[#ff4d2d] text-white font-semibold hover:bg-[#e64323] transition ${
+              loading ? "opacity-60 cursor-not-allowed" : ""
+            }`}
           >
-            Deposit
-          </button>
-          <button
-            onClick={() => postAction("withdraw")}
-            className="px-4 py-2 bg-red-500 text-white rounded"
-            disabled={loading}
-          >
-            Withdraw
+            Sign Out
           </button>
         </div>
-      </div>
-
-      <div>
-        <h3 className="text-xl font-semibold mb-2">Transactions</h3>
-        {transactions.length === 0 ? (
-          <p className="text-gray-600">No transactions yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {transactions.map((t, idx) => (
-              <li key={idx} className="flex justify-between border rounded p-2">
-                <div>
-                  <div className="font-medium">{t.type}</div>
-                  <div className="text-sm text-gray-500">
-                    {new Date(
-                      t.date || t.createdAt || Date.now()
-                    ).toLocaleString()}
-                  </div>
-                </div>
-                <div
-                  className={`font-semibold ${
-                    t.type === "DEPOSIT" ? "text-green-600" : "text-red-600"
-                  }`}
-                >
-                  {t.type === "DEPOSIT" ? "+" : "-"}₹ {t.amount}
-                </div>
-              </li>
-            ))}
-          </ul>
+        {loading && (
+          <p className="text-blue-200 font-medium mb-4">Loading...</p>
         )}
+        {err && <p className="text-red-400 font-semibold mb-4">{err}</p>}
+
+        {/* Balance Card */}
+        <div className="mb-8 flex flex-col items-center">
+          <span className="text-blue-200 text-base mb-1">Current balance</span>
+          <span className="text-5xl font-semibold text-[#38bdf8] drop-shadow">
+            {balance !== null ? `₹ ${balance}` : "-"}
+          </span>
+        </div>
+
+        {/* Deposit / Withdraw Card */}
+        <div className="mb-8 bg-white/10 rounded-xl p-6 flex flex-col items-center shadow border border-[#38bdf8]/10">
+          <label className="block mb-2 text-blue-100 font-semibold">
+            Amount
+          </label>
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            className="border rounded-lg px-4 py-3 mb-4 text-white bg-transparent w-48 text-lg focus:outline-none focus:border-[#38bdf8] border-[#38bdf8]/40"
+            placeholder="Enter amount"
+            min="1"
+          />
+          <div className="flex space-x-4">
+            <button
+              onClick={() => postAction("deposit")}
+              className="px-6 py-2 font-bold rounded-lg bg-gradient-to-r from-[#15d4bc] to-[#38bdf8] text-white shadow hover:scale-105 active:scale-95 transition text-base"
+              disabled={loading}
+            >
+              Deposit
+            </button>
+            <button
+              onClick={() => postAction("withdraw")}
+              className="px-6 py-2 font-bold rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a694fa] text-white shadow hover:scale-105 active:scale-95 transition text-base"
+              disabled={loading}
+            >
+              Withdraw
+            </button>
+          </div>
+        </div>
+
+        {/* Transactions Card */}
+        <div className="bg-white/10 rounded-xl p-6 shadow-md border border-[#38bdf8]/10">
+          <h3 className="text-2xl font-semibold mb-4 text-white">
+            Transactions
+          </h3>
+          {transactions.length === 0 ? (
+            <p className="text-blue-200">No transactions yet.</p>
+          ) : (
+            <ul className="space-y-3">
+              {transactions.map((t, idx) => (
+                <li
+                  key={idx}
+                  className="flex justify-between rounded-xl p-4 bg-[#232a3e]/60 border border-[#38bdf8]/10 items-center"
+                >
+                  <div>
+                    <div className="font-bold text-white">{t.type}</div>
+                    <div className="text-sm text-blue-200">
+                      {new Date(
+                        t.date || t.createdAt || Date.now()
+                      ).toLocaleString()}
+                    </div>
+                  </div>
+                  <div
+                    className={`font-extrabold text-lg
+                        ${
+                          t.type === "DEPOSIT"
+                            ? "text-[#15d4bc]"
+                            : "text-[#a694fa]"
+                        }
+                      `}
+                  >
+                    {t.type === "DEPOSIT" ? "+" : "-"}₹ {t.amount}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

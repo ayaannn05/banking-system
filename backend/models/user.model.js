@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    username: { type: String, required: true },
+    username: { type: String, required: true, unique: true, index: true },
     email: { type: String, required: true, unique: true, index: true },
 
     password: { type: String, required: true },
@@ -15,7 +15,6 @@ const userSchema = new mongoose.Schema(
     },
     accessToken: { type: String, default: null },
     tokenExpiresAt: { type: Date, default: null },
-    balanceCents: { type: Number, default: 0 },
   },
   { timestamps: true }
 );
