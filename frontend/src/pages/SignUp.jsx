@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
@@ -27,21 +28,23 @@ function SignUp() {
   const handleSignUp = async () => {
     try {
       await axios.post(
-     `${serverURL}/api/auth/signup`,
-     {
-       username: userName,
-       email,
-       password,
-       role,
-     },
-     { withCredentials: true }
-   );
+        `${serverURL}/api/auth/signup`,
+        {
+          username: userName,
+          email,
+          password,
+          role,
+        },
+        { withCredentials: true }
+      );
       setErr("");
+      toast.success("Sign up successful! Please log in.");
 
       // You might want to redirect to dashboard or login here
       navigate("/login", { state: { role } });
     } catch (err) {
       setErr(err.response?.data?.message || err.message);
+      toast.error(err.response?.data?.message || "Sign up failed");
     }
   };
 
@@ -136,9 +139,6 @@ function SignUp() {
             </button>
           </div>
         </div>
-
-        {/* Error */}
-        {err && <p className="text-red-400 text-center my-3 rounded">{err}</p>}
 
         {/* Sign Up button */}
         <button

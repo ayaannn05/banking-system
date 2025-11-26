@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   // Brand colors
@@ -29,6 +30,7 @@ function LoginPage() {
         { withCredentials: true }
       );
       setErr("");
+      toast.success("Login successful!");
 
       const { accessToken, role: userRole } = result.data || {};
       if (accessToken) {
@@ -45,6 +47,7 @@ function LoginPage() {
       const message =
         err?.response?.data?.message || err?.message || "An error occurred";
       setErr(message);
+        toast.error(message);
     }
   };
 
@@ -123,9 +126,6 @@ function LoginPage() {
             </button>
           </div>
         </div>
-
-        {/* Error */}
-        {err && <p className="text-red-400 text-center my-3 rounded">{err}</p>}
 
         {/* Sign In button */}
         <button

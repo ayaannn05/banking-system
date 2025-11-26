@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import formatDateTime from "../utils/formatDateTime";
 
 function BankerDashboard() {
   const serverUrl = "http://localhost:8000";
@@ -137,9 +138,9 @@ function BankerDashboard() {
                             {last.type}
                           </span>{" "}
                           • ₹ {last.amount} •{" "}
-                          {new Date(
+                          {formatDateTime(
                             last.createdAt || last.date || Date.now()
-                          ).toLocaleString()}
+                          )}
                         </>
                       ) : (
                         <span className="text-blue-200">No transactions</span>

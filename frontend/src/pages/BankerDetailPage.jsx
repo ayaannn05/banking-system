@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import formatDateTime from "../utils/formatDateTime";
 
 export default function BankerDetailPage() {
   const { id } = useParams();
@@ -94,9 +95,7 @@ export default function BankerDetailPage() {
                     <div>
                       <div className="font-bold text-white">{t.type}</div>
                       <div className="text-sm text-blue-200">
-                        {new Date(
-                          t.createdAt || t.date || Date.now()
-                        ).toLocaleString()}
+                        {formatDateTime(t.createdAt || t.date || Date.now())}
                       </div>
                     </div>
                     <div

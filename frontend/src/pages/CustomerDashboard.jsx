@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import formatDateTime from "../utils/formatDateTime";
+import { toast } from "react-toastify";
 
 function CustomerDashboard() {
   const serverUrl = "http://localhost:8000";
@@ -31,7 +33,9 @@ function CustomerDashboard() {
         navigate("/login", { replace: true });
         return;
       }
+      toast.error("Failed to load transactions");
       setErr(
+        // setErr(
         error?.response?.data?.message ||
           error.message ||
           "Failed to load transactions"
@@ -50,10 +54,12 @@ function CustomerDashboard() {
         {},
         { headers: getAuthHeaders(), withCredentials: true }
       );
+      toast.success("Signed out successfully!");
     } catch (error) {
       if (error?.response?.status === 401) {
         // token invalid or expired, continue to clear local state
       } else {
+        toast.error("Failed to sign out");
         setErr(
           error?.response?.data?.message ||
             error.message ||
@@ -94,11 +100,15 @@ function CustomerDashboard() {
       setBalance(res.data.balance);
       setTransactions(res.data.transactions || []);
       setAmount("");
+      toast.success(
+        `${path.charAt(0).toUpperCase() + path.slice(1)} successful!`
+      );
     } catch (error) {
       if (error?.response?.status === 401) {
         navigate("/login", { replace: true });
         return;
       }
+      toast.error(error?.response?.data?.message || `Failed to ${path}`);
       setErr(
         error?.response?.data?.message || error.message || `Failed to ${path}`
       );
@@ -124,10 +134,6 @@ function CustomerDashboard() {
             Sign Out
           </button>
         </div>
-        {loading && (
-          <p className="text-blue-200 font-medium mb-4">Loading...</p>
-        )}
-        {err && <p className="text-red-400 font-semibold mb-4">{err}</p>}
 
         {/* Balance Card */}
         <div className="mb-8 flex flex-col items-center">
@@ -185,9 +191,7 @@ function CustomerDashboard() {
                   <div>
                     <div className="font-bold text-white">{t.type}</div>
                     <div className="text-sm text-blue-200">
-                      {new Date(
-                        t.date || t.createdAt || Date.now()
-                      ).toLocaleString()}
+                      {formatDateTime(t.date || t.createdAt || Date.now())}
                     </div>
                   </div>
                   <div
