@@ -1,23 +1,30 @@
 import express from "express";
 import dotenv from "dotenv";
+dotenv.config();
 import cors from "cors";
 import connectDB from "./config/db.js";
-
-dotenv.config();
+import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth.routes.js";
+import customerRouter from "./routes/customer.routes.js";
+import bankerRouter from "./routes/banker.routes.js";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
 
 // middleware
 app.use(express.json());
-
-// CORS config to allow react app at localhost:3000
+app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
+
+// routes
+app.use("/api/auth", authRouter);
+app.use("/api/customer", customerRouter);
+app.use("/api/banker", bankerRouter);
 
 // connect DB and then start server
 connectDB()
