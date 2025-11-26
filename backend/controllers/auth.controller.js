@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import { generateAccessToken36 } from "../utils/token.js";
+import Account from "../models/account.model.js";
 
 export const signUp = async (req, res) => {
   try {
@@ -37,6 +38,23 @@ export const signUp = async (req, res) => {
       tokenExpiresAt,
     });
     await user.save();
+    // Create an empty account for customers so the Accounts table/log exists
+    if (role === "customer") {
+      try {
+        const existing = await Account.findOne({ userId: user._id }).exec();
+        if (!existing) {
+          const acct = new Account({
+            userId: user._id,
+            balance: 0,
+            transactions: [],
+          });
+          await acct.save();
+        }
+      } catch (acctErr) {
+        // Log but don't fail sign up if account creation has issues
+        console.error("Failed to create account on signup:", acctErr.message);
+      }
+    }
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
     res.status(500).json({ message: "Sign up failed" });
@@ -77,12 +95,22 @@ export const signIn = async (req, res) => {
 
 export const signOut = async (req, res) => {
   try {
-    const user = req.user;
+    let user = req.user;
+    // If route wasn't protected for some reason, try to find user by token header
+    if (!user) {
+      const header = req.header("Authorization") || "";
+      const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+      if (!token) return res.status(401).json({ message: "No token provided" });
+      user = await User.findOne({ accessToken: token }).exec();
+      if (!user) return res.status(401).json({ message: "Invalid token" });
+    }
+
     user.accessToken = null;
     user.tokenExpiresAt = null;
     await user.save();
     res.json({ message: "Signed out successfully" });
   } catch (error) {
+    console.error("signOut error:", error);
     res.status(500).json({ message: "SignOut failed" });
   }
 };
