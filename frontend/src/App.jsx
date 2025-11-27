@@ -12,7 +12,7 @@ import BankerDetailPage from "./pages/BankerDetailPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-const serverUrl = "http://localhost:8000";
+
 function LandingGate() {
   const navigate = useNavigate();
   useEffect(() => {

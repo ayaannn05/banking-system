@@ -74,7 +74,7 @@ export const signIn = async (req, res) => {
     // role for redirection to correct dashboard, if customer redirect to customer dashboard
     if (role && user.role !== role) {
       return res.status(403).json({
-        message: `This is ${role} login only. ${role}s can log in here. Please use the correct login page.`,
+        message: `Access denied for role: ${role}`,
       });
     }
     const accessToken = generateAccessToken36();

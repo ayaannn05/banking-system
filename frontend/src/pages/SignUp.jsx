@@ -19,6 +19,10 @@ function SignUp() {
 
   const handleSignUp = async () => {
     try {
+      if (!userName || !email || !password) {
+        toast.error("Please fill in all fields");
+        return;
+      }
       await axios.post(
         `${API_CONFIG.baseURL}/api/auth/signup`,
         {
