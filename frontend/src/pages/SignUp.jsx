@@ -23,6 +23,20 @@ function SignUp() {
         toast.error("Please fill in all fields");
         return;
       }
+
+      // Validate username length
+      if (userName.trim().length < 3) {
+        toast.error("Username must be at least 3 characters long");
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+
       await axios.post(
         `${API_CONFIG.baseURL}/api/auth/signup`,
         {
@@ -67,11 +81,14 @@ function SignUp() {
               </label>
               <input
                 type="text"
+                id="fullName"
                 onChange={(e) => setUserName(e.target.value)}
                 value={userName}
                 placeholder="Enter your username"
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                 required
+                minLength={3}
+                title="Username must be at least 3 characters long"
               />
             </div>
 
@@ -85,11 +102,14 @@ function SignUp() {
               </label>
               <input
                 type="email"
+                id="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                 required
+                pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+                title="Please enter a valid email address"
               />
             </div>
 
@@ -104,11 +124,14 @@ function SignUp() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  id="password"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                   required
+                  minLength={6}
+                  title="Password must be at least 6 characters long"
                 />
                 <button
                   type="button"
