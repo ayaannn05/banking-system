@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin:
-      "https://banking-system-17ik.onrender.com/" || "http://localhost:5173",
+      "https://banking-system-17ik.onrender.com" || "http://localhost:5173",
     credentials: true,
   })
 );
