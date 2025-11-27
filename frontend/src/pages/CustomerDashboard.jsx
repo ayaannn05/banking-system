@@ -161,49 +161,49 @@ function CustomerDashboard() {
       <div className="min-h-screen bg-gray-50">
         <Nav />
 
-        <div className="pt-24 pb-20 px-6">
+        <div className="pt-20 sm:pt-24 pb-12 sm:pb-20 px-4 sm:px-6">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 sm:mb-8 gap-4">
               <div>
-                <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2">
                   Customer Dashboard
                 </h1>
-                <p className="text-gray-600">
+                <p className="text-sm sm:text-base text-gray-600">
                   Manage your account and transactions
                 </p>
               </div>
               <button
                 onClick={handleSignOut}
                 disabled={loading}
-                className="px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold rounded-xl hover:border-red-400 hover:text-red-600 transition disabled:opacity-60"
+                className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-white border-2 border-gray-300 text-gray-700 font-semibold text-sm sm:text-base rounded-xl hover:border-red-400 hover:text-red-600 transition disabled:opacity-60"
               >
                 Sign Out
               </button>
             </div>
 
             {/* Balance Card */}
-            <div className="bg-gradient-to-br from-[#39b385] to-[#9be15d] rounded-3xl shadow-xl p-8 mb-8 text-white">
-              <p className="text-white/80 text-sm font-medium mb-2">
+            <div className="bg-gradient-to-br from-[#39b385] to-[#9be15d] rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 mb-6 sm:mb-8 text-white">
+              <p className="text-white/80 text-xs sm:text-sm font-medium mb-2">
                 Total Balance
               </p>
-              <p className="text-5xl font-bold mb-6">
+              <p className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">
                 {balance !== null ? `₹ ${balance.toLocaleString()}` : "-"}
               </p>
 
               {/* Action Buttons */}
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <button
                   onClick={() => openModal("deposit")}
                   disabled={loading}
-                  className="flex-1 bg-white text-green-700 font-bold py-4 rounded-xl hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
+                  className="flex-1 bg-white text-green-700 font-bold py-3 sm:py-4 text-sm sm:text-base rounded-xl hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
                 >
                   💰 Deposit
                 </button>
                 <button
                   onClick={() => openModal("withdraw")}
                   disabled={loading}
-                  className="flex-1 bg-white/20 backdrop-blur-sm text-white font-bold py-4 rounded-xl border-2 border-white/30 hover:bg-white/30 hover:scale-[1.02] transition disabled:opacity-60"
+                  className="flex-1 bg-white/20 backdrop-blur-sm text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-xl border-2 border-white/30 hover:bg-white/30 hover:scale-[1.02] transition disabled:opacity-60"
                 >
                   💸 Withdraw
                 </button>
@@ -211,13 +211,13 @@ function CustomerDashboard() {
             </div>
 
             {/* Transactions */}
-            <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">
+            <div className="bg-white rounded-2xl sm:rounded-3xl shadow-lg p-4 sm:p-6 md:p-8 border border-gray-100">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
                   Recent Transactions
                 </h2>
                 {totalTransactions > 0 && (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs sm:text-sm text-gray-500">
                     Showing {Math.min(currentPage * 10, totalTransactions)} of{" "}
                     {totalTransactions}
                   </p>
@@ -225,35 +225,35 @@ function CustomerDashboard() {
               </div>
 
               {transactions.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-4xl">📊</span>
+                <div className="text-center py-8 sm:py-12">
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-3xl sm:text-4xl">📊</span>
                   </div>
-                  <p className="text-gray-500">No transactions yet.</p>
+                  <p className="text-sm sm:text-base text-gray-500">No transactions yet.</p>
                 </div>
               ) : (
                 <>
-                  <div className="space-y-3">
+                  <div className="space-y-2 sm:space-y-3">
                     {transactions.map((t, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:shadow-md transition"
+                        className="flex items-center justify-between p-3 sm:p-4 md:p-5 bg-gray-50 rounded-xl sm:rounded-2xl border border-gray-100 hover:shadow-md transition"
                       >
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 sm:gap-3 md:gap-4">
                           <div
-                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center ${
                               t.type === "DEPOSIT"
                                 ? "bg-green-100 text-green-700"
                                 : "bg-yellow-100 text-yellow-700"
                             }`}
                           >
-                            <span className="text-2xl font-bold">
+                            <span className="text-lg sm:text-xl md:text-2xl font-bold">
                               {t.type === "DEPOSIT" ? "+" : "-"}
                             </span>
                           </div>
                           <div>
-                            <p className="font-bold text-gray-900">{t.type}</p>
-                            <p className="text-sm text-gray-500">
+                            <p className="font-bold text-sm sm:text-base text-gray-900">{t.type}</p>
+                            <p className="text-xs sm:text-sm text-gray-500">
                               {formatDateTime(
                                 t.date || t.createdAt || Date.now()
                               )}
@@ -261,7 +261,7 @@ function CustomerDashboard() {
                           </div>
                         </div>
                         <p
-                          className={`text-xl font-bold ${
+                          className={`text-base sm:text-lg md:text-xl font-bold ${
                             t.type === "DEPOSIT"
                               ? "text-green-700"
                               : "text-yellow-700"
@@ -276,16 +276,16 @@ function CustomerDashboard() {
 
                   {/* Pagination */}
                   {totalPages > 1 && (
-                    <div className="flex items-center justify-center gap-2 mt-8">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-6 sm:mt-8">
                       <button
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1 || loading}
-                        className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         ← Previous
                       </button>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto max-w-full">
                         {Array.from(
                           { length: totalPages },
                           (_, i) => i + 1
@@ -301,7 +301,7 @@ function CustomerDashboard() {
                                 key={page}
                                 onClick={() => handlePageChange(page)}
                                 disabled={loading}
-                                className={`w-10 h-10 rounded-lg font-semibold transition ${
+                                className={`w-8 h-8 sm:w-10 sm:h-10 text-sm sm:text-base rounded-lg font-semibold transition ${
                                   currentPage === page
                                     ? "bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white shadow-md"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -315,7 +315,7 @@ function CustomerDashboard() {
                             page === currentPage + 2
                           ) {
                             return (
-                              <span key={page} className="text-gray-400">
+                              <span key={page} className="text-gray-400 text-sm sm:text-base">
                                 ...
                               </span>
                             );
@@ -327,7 +327,7 @@ function CustomerDashboard() {
                       <button
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages || loading}
-                        className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="w-full sm:w-auto px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
                       >
                         Next →
                       </button>
@@ -343,11 +343,11 @@ function CustomerDashboard() {
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white rounded-3xl w-full max-w-md p-8 shadow-2xl">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          <div className="bg-white rounded-2xl sm:rounded-3xl w-full max-w-md p-6 sm:p-8 shadow-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">
               {modalType === "deposit" ? "Deposit Funds" : "Withdraw Funds"}
             </h3>
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
               Available balance:{" "}
               <span className="font-bold text-gray-900">
                 {balance !== null ? `₹ ${balance.toLocaleString()}` : "-"}
@@ -358,21 +358,21 @@ function CustomerDashboard() {
               min="1"
               value={modalAmount}
               onChange={(e) => setModalAmount(e.target.value)}
-              className="w-full px-4 py-4 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 text-lg focus:outline-none focus:border-green-500 transition mb-6"
+              className="w-full px-4 py-3 sm:py-4 rounded-xl bg-gray-50 border-2 border-gray-200 text-gray-900 text-base sm:text-lg focus:outline-none focus:border-green-500 transition mb-4 sm:mb-6"
               placeholder="Enter amount"
               autoFocus
             />
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={closeModal}
-                className="flex-1 px-6 py-3 rounded-xl bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition"
+                className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition"
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
                 onClick={confirmModal}
-                className="flex-1 px-6 py-3 rounded-xl bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
+                className="flex-1 px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base rounded-xl bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold hover:shadow-lg hover:scale-[1.02] transition disabled:opacity-60"
                 disabled={loading}
               >
                 {loading ? "Processing..." : "Confirm"}

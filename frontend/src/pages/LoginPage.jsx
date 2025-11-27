@@ -62,23 +62,23 @@ function LoginPage() {
     <div className="min-h-screen bg-gray-50">
       <Nav />
 
-      <div className="flex items-center justify-center px-6 pt-24 pb-20">
+      <div className="flex items-center justify-center px-4 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-20">
         <div className="w-full max-w-md">
-          <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-6 sm:p-8 border border-gray-100">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
                 {role === "banker" ? "Banker Login" : "Customer Login"}
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600">
                 Welcome back! Please enter your credentials.
               </p>
             </div>
 
             {/* Email */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <label
                 htmlFor="email"
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-gray-700 font-semibold mb-2 text-sm sm:text-base"
               >
                 Email Address
               </label>
@@ -88,7 +88,7 @@ function LoginPage() {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
+                className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                 required
                 autoFocus
                 pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
@@ -97,10 +97,10 @@ function LoginPage() {
             </div>
 
             {/* Password */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <label
                 htmlFor="password"
-                className="block text-gray-700 font-semibold mb-2"
+                className="block text-gray-700 font-semibold mb-2 text-sm sm:text-base"
               >
                 Password
               </label>
@@ -111,7 +111,7 @@ function LoginPage() {
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
+                  className="w-full border-2 border-gray-200 rounded-xl px-4 py-2.5 sm:py-3 text-sm sm:text-base text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                   required
                   minLength={6}
                   title="Password must be at least 6 characters long"
@@ -119,13 +119,13 @@ function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-4 top-4 text-gray-500 hover:text-gray-700"
+                  className="absolute right-3 sm:right-4 top-2.5 sm:top-3.5 text-gray-500 hover:text-gray-700"
                   tabIndex={-1}
                 >
                   {showPassword ? (
-                    <FaRegEyeSlash size={20} />
+                    <FaRegEyeSlash size={18} className="sm:w-5 sm:h-5" />
                   ) : (
-                    <FaRegEye size={20} />
+                    <FaRegEye size={18} className="sm:w-5 sm:h-5" />
                   )}
                 </button>
               </div>
@@ -135,13 +135,13 @@ function LoginPage() {
             <button
               type="button"
               onClick={handleSignIn}
-              className="w-full bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+              className="w-full bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold py-3 sm:py-4 text-sm sm:text-base rounded-xl shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
             >
               Sign In
             </button>
 
             {/* Sign Up Link */}
-            <p className="text-center mt-6 text-gray-600">
+            <p className="text-center mt-4 sm:mt-6 text-sm sm:text-base text-gray-600">
               Don't have an account?{" "}
               <span
                 onClick={() => navigate("/signup", { state: { role } })}

@@ -8,33 +8,33 @@ export default function LandingPage() {
       <Nav showAuthButtons={true} />
 
       {/* Hero Section */}
-      <section className="mt-10 h-[70vh] flex items-center justify-center px-6 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
+      <section className="mt-10 min-h-[70vh] py-12 md:py-0 flex items-center justify-center px-4 md:px-6 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-16 items-center">
             {/* Left Column - Content */}
-            <div className="space-y-8">
-              <div className="inline-block px-5 py-2 rounded-full bg-[var(--color-primary-opacity)] border border-[var(--color-primary)] text-[var(--color-primary-darker)] text-sm font-semibold animate-fade-in">
+            <div className="space-y-6 md:space-y-8 text-center md:text-left">
+              <div className="inline-block px-4 md:px-5 py-2 rounded-full bg-[var(--color-primary-opacity)] border border-[var(--color-primary)] text-[var(--color-primary-darker)] text-xs md:text-sm font-semibold animate-fade-in">
                 Welcome to Modern Banking
               </div>
 
-              <h1 className="text-6xl lg:text-7xl font-extrabold text-gray-900 leading-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-gray-900 leading-tight">
                 Banking Made{" "}
                 <span className="bg-gradient-to-r from-[#39b385] to-[#9be15d] bg-clip-text text-transparent">
                   Simple
                 </span>
               </h1>
 
-              <p className="text-2xl text-gray-600 leading-relaxed max-w-xl">
+              <p className="text-lg sm:text-xl md:text-2xl text-gray-600 leading-relaxed max-w-xl mx-auto md:mx-0">
                 Everything you need in a modern banking app. Fast, secure, and
                 designed for your financial freedom.
               </p>
 
-              <div className="flex flex-wrap gap-5 pt-6">
+              <div className="flex flex-col sm:flex-row flex-wrap gap-4 md:gap-5 pt-4 md:pt-6 justify-center md:justify-start">
                 <button
                   onClick={() =>
                     navigate("/login", { state: { role: "customer" } })
                   }
-                  className="px-10 py-5 bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-300"
+                  className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white font-bold text-base md:text-lg rounded-full shadow-xl hover:shadow-2xl hover:scale-105 md:hover:scale-110 transition-all duration-300"
                 >
                   Customer Login →
                 </button>
@@ -42,7 +42,7 @@ export default function LandingPage() {
                   onClick={() =>
                     navigate("/login", { state: { role: "banker" } })
                   }
-                  className="px-10 py-5 bg-white text-gray-700 font-bold text-lg rounded-full border-2 border-gray-300 hover:border-[var(--color-primary)] hover:text-[var(--color-primary-darker)] hover:scale-105 transition-all duration-300"
+                  className="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-white text-gray-700 font-bold text-base md:text-lg rounded-full border-2 border-gray-300 hover:border-[var(--color-primary)] hover:text-[var(--color-primary-darker)] hover:scale-105 transition-all duration-300"
                 >
                   Banker Login
                 </button>
@@ -50,37 +50,37 @@ export default function LandingPage() {
             </div>
 
             {/* Right Column - Card */}
-            <div className="flex items-center justify-center">
-              <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-10 border border-gray-100 hover:shadow-3xl transition-shadow duration-300 transform hover:-translate-y-2">
-                <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-center mt-8 md:mt-0">
+              <div className="w-full max-w-md bg-white rounded-2xl md:rounded-3xl shadow-2xl p-6 md:p-10 border border-gray-100 hover:shadow-3xl transition-shadow duration-300 transform hover:-translate-y-2">
+                <div className="flex items-center justify-between mb-6 md:mb-8">
                   <div>
-                    <h3 className="text-gray-900 font-bold text-2xl mb-2">
+                    <h3 className="text-gray-900 font-bold text-xl md:text-2xl mb-1 md:mb-2">
                       Digital Wallet
                     </h3>
-                    <p className="text-gray-500">Secure & Protected</p>
+                    <p className="text-gray-500 text-sm md:text-base">Secure & Protected</p>
                   </div>
-                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg animate-pulse">
-                    <span className="text-4xl">💳</span>
+                  <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg animate-pulse">
+                    <span className="text-3xl md:text-4xl">💳</span>
                   </div>
                 </div>
 
-                <div className="mb-8">
-                  <p className="text-gray-500 text-sm mb-2">Total Balance</p>
-                  <p className="text-5xl font-bold text-gray-900">₹12,450.00</p>
+                <div className="mb-6 md:mb-8">
+                  <p className="text-gray-500 text-xs md:text-sm mb-2">Total Balance</p>
+                  <p className="text-4xl md:text-5xl font-bold text-gray-900">₹12,450.00</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-5">
-                  <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-2xl p-6 border border-green-200">
-                    <p className="text-gray-600 text-xs mb-2 font-semibold">
+                <div className="grid grid-cols-2 gap-3 md:gap-5">
+                  <div className="bg-gradient-to-br from-green-50 to-green-100/50 rounded-xl md:rounded-2xl p-4 md:p-6 border border-green-200">
+                    <p className="text-gray-600 text-xs mb-1 md:mb-2 font-semibold">
                       Transactions
                     </p>
-                    <p className="text-3xl font-bold text-gray-900">1,234</p>
+                    <p className="text-2xl md:text-3xl font-bold text-gray-900">1,234</p>
                   </div>
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-2xl p-6 border border-blue-200">
-                    <p className="text-gray-600 text-xs mb-2 font-semibold">
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 rounded-xl md:rounded-2xl p-4 md:p-6 border border-blue-200">
+                    <p className="text-gray-600 text-xs mb-1 md:mb-2 font-semibold">
                       Customers
                     </p>
-                    <p className="text-3xl font-bold text-gray-900">8,921</p>
+                    <p className="text-2xl md:text-3xl font-bold text-gray-900">8,921</p>
                   </div>
                 </div>
               </div>
@@ -90,52 +90,52 @@ export default function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="h-[60vh] flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white px-6">
+      <section className="min-h-[60vh] py-12 md:py-0 flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white px-4 md:px-6">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-extrabold text-gray-900 mb-4">
+          <div className="text-center mb-10 md:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 mb-3 md:mb-4">
               Why Choose Bankist?
             </h2>
-            <p className="text-2xl text-gray-600">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-600">
               Everything you need for modern banking
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-10">
-            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-4xl">⚡</span>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-10">
+            <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-3xl md:text-4xl">⚡</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
                 Instant Transfers
               </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed">
                 Send and receive money instantly with zero fees. Real-time
                 processing for all your transactions.
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ffb003] to-[#ffcb03] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-4xl">🔒</span>
+            <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-[#ffb003] to-[#ffcb03] flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-3xl md:text-4xl">🔒</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
                 Bank-Level Security
               </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed">
                 Your money is protected with industry-leading encryption and
                 multi-factor authentication.
               </p>
             </div>
 
-            <div className="bg-white rounded-3xl p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ff585f] to-[#fd424b] flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <span className="text-4xl">📊</span>
+            <div className="bg-white rounded-2xl md:rounded-3xl p-6 md:p-10 shadow-xl border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 group sm:col-span-2 md:col-span-1">
+              <div className="w-12 h-12 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-[#ff585f] to-[#fd424b] flex items-center justify-center mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+                <span className="text-3xl md:text-4xl">📊</span>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">
                 Real-Time Analytics
               </h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
+              <p className="text-gray-600 text-base md:text-lg leading-relaxed">
                 Track your spending and savings with detailed insights and smart
                 financial reports.
               </p>
@@ -145,18 +145,18 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="h-[40vh] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center px-6">
+      <footer className="min-h-[40vh] py-12 md:py-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center px-4 md:px-6">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-8">
             {/* Logo & About */}
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg">
-                  <span className="text-white font-bold text-2xl">B</span>
+            <div className="sm:col-span-2 md:col-span-2">
+              <div className="flex items-center space-x-2 md:space-x-3 mb-3 md:mb-4">
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-[#39b385] to-[#9be15d] flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-xl md:text-2xl">B</span>
                 </div>
-                <span className="text-3xl font-bold">Bankist</span>
+                <span className="text-2xl md:text-3xl font-bold">Bankist</span>
               </div>
-              <p className="text-gray-400 max-w-md text-lg">
+              <p className="text-gray-400 max-w-md text-base md:text-lg">
                 Modern banking made simple. Secure, fast, and designed for your
                 financial freedom.
               </p>
@@ -164,8 +164,8 @@ export default function LandingPage() {
 
             {/* Quick Links */}
             <div>
-              <h4 className="font-bold text-xl mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="font-bold text-lg md:text-xl mb-3 md:mb-4">Quick Links</h4>
+              <ul className="space-y-2 text-gray-400 text-sm md:text-base">
                 <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
                   About Us
                 </li>
@@ -180,8 +180,8 @@ export default function LandingPage() {
 
             {/* Legal */}
             <div>
-              <h4 className="font-bold text-xl mb-4">Legal</h4>
-              <ul className="space-y-2 text-gray-400">
+              <h4 className="font-bold text-lg md:text-xl mb-3 md:mb-4">Legal</h4>
+              <ul className="space-y-2 text-gray-400 text-sm md:text-base">
                 <li className="hover:text-[var(--color-primary)] cursor-pointer transition">
                   Privacy Policy
                 </li>
@@ -196,8 +196,8 @@ export default function LandingPage() {
           </div>
 
           {/* Copyright */}
-          <div className="border-t border-gray-700 pt-6 text-center">
-            <p className="text-gray-400">
+          <div className="border-t border-gray-700 pt-4 md:pt-6 text-center">
+            <p className="text-gray-400 text-sm md:text-base">
               © 2025 Bankist. All rights reserved. | Built by Ayaan Ansari
             </p>
           </div>
