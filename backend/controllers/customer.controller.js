@@ -7,9 +7,41 @@ export const getTransactions = async (req, res) => {
     if (!userId) return res.status(400).json({ message: "Missing user id" });
 
     const account = await Account.findOne({ userId: userId });
-    if (!account) return res.json({ balance: 0, transactions: [] });
+    if (!account)
+      return res.json({
+        balance: 0,
+        transactions: [],
+        totalPages: 0,
+        currentPage: 1,
+      });
 
-    res.json({ balance: account.balance, transactions: account.transactions });
+    // Pagination
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    const allTransactions = account.transactions || [];
+    const totalTransactions = allTransactions.length;
+    const totalPages = Math.ceil(totalTransactions / limit);
+
+    // Sort transactions by date (newest first) and paginate
+    const sortedTransactions = allTransactions.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+
+    const paginatedTransactions = sortedTransactions.slice(
+      startIndex,
+      endIndex
+    );
+
+    res.json({
+      balance: account.balance,
+      transactions: paginatedTransactions,
+      currentPage: page,
+      totalPages: totalPages,
+      totalTransactions: totalTransactions,
+    });
   } catch (error) {
     console.error("getTransactions error:", error);
     res.status(500).json({ message: "Server error fetching transactions" });

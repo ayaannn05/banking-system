@@ -26,8 +26,12 @@ export const listAccounts = async (req, res) => {
 export const getUserTransactions = async (req, res) => {
   try {
     const { accountId } = req.params;
-    // Support sorting transactions
+    // Support sorting transactions and pagination
     const { sortBy = "createdAt", order = "desc" } = req.query;
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
 
     const account = await Account.findById(accountId)
       .populate("userId", "name email username")
@@ -49,11 +53,20 @@ export const getUserTransactions = async (req, res) => {
       return (ta - tb) * dir;
     });
 
-    // Return account with sorted transactions
-    const accountObj = account.toObject ? account.toObject() : { ...account };
-    accountObj.transactions = transactions;
+    const totalTransactions = transactions.length;
+    const totalPages = Math.ceil(totalTransactions / limit);
+    const paginatedTransactions = transactions.slice(startIndex, endIndex);
 
-    res.json({ account: accountObj });
+    // Return account with paginated transactions
+    const accountObj = account.toObject ? account.toObject() : { ...account };
+    accountObj.transactions = paginatedTransactions;
+
+    res.json({
+      account: accountObj,
+      currentPage: page,
+      totalPages: totalPages,
+      totalTransactions: totalTransactions,
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error fetching transactions" });
   }

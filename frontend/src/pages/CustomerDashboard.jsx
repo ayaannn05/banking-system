@@ -10,6 +10,10 @@ function CustomerDashboard() {
   const navigate = useNavigate();
   const [balance, setBalance] = useState(null);
   const [transactions, setTransactions] = useState([]);
+  // pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalTransactions, setTotalTransactions] = useState(0);
   // modal state
   const [modalOpen, setModalOpen] = useState(false);
   const [modalType, setModalType] = useState(null); // 'deposit' or 'withdraw'
@@ -22,16 +26,22 @@ function CustomerDashboard() {
     return token ? { Authorization: `Bearer ${token}` } : {};
   };
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = async (page = 1) => {
     setLoading(true);
 
     try {
-      const res = await axios.get(`${serverUrl}/api/customer/transactions`, {
-        headers: getAuthHeaders(),
-        withCredentials: true,
-      });
+      const res = await axios.get(
+        `${serverUrl}/api/customer/transactions?page=${page}`,
+        {
+          headers: getAuthHeaders(),
+          withCredentials: true,
+        }
+      );
       setBalance(res.data.balance);
       setTransactions(res.data.transactions || []);
+      setCurrentPage(res.data.currentPage || 1);
+      setTotalPages(res.data.totalPages || 0);
+      setTotalTransactions(res.data.totalTransactions || 0);
     } catch (error) {
       if (error?.response?.status === 401) {
         navigate("/login", { replace: true });
@@ -140,7 +150,17 @@ function CustomerDashboard() {
 
   const confirmModal = async () => {
     const ok = await postAction(modalType, modalAmount);
-    if (ok) closeModal();
+    if (ok) {
+      closeModal();
+      // Refresh to page 1 after transaction
+      fetchTransactions(1);
+    }
+  };
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      fetchTransactions(newPage);
+    }
   };
 
   return (
@@ -199,9 +219,17 @@ function CustomerDashboard() {
 
             {/* Transactions */}
             <div className="bg-white rounded-3xl shadow-lg p-8 border border-gray-100">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">
-                Recent Transactions
-              </h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Recent Transactions
+                </h2>
+                {totalTransactions > 0 && (
+                  <p className="text-sm text-gray-500">
+                    Showing {Math.min(currentPage * 10, totalTransactions)} of{" "}
+                    {totalTransactions}
+                  </p>
+                )}
+              </div>
 
               {transactions.length === 0 ? (
                 <div className="text-center py-12">
@@ -211,46 +239,108 @@ function CustomerDashboard() {
                   <p className="text-gray-500">No transactions yet.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {transactions.map((t, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:shadow-md transition"
-                    >
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                <>
+                  <div className="space-y-3">
+                    {transactions.map((t, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between p-5 bg-gray-50 rounded-2xl border border-gray-100 hover:shadow-md transition"
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                              t.type === "DEPOSIT"
+                                ? "bg-green-100 text-green-700"
+                                : "bg-yellow-100 text-yellow-700"
+                            }`}
+                          >
+                            <span className="text-2xl font-bold">
+                              {t.type === "DEPOSIT" ? "+" : "-"}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-bold text-gray-900">{t.type}</p>
+                            <p className="text-sm text-gray-500">
+                              {formatDateTime(
+                                t.date || t.createdAt || Date.now()
+                              )}
+                            </p>
+                          </div>
+                        </div>
+                        <p
+                          className={`text-xl font-bold ${
                             t.type === "DEPOSIT"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-yellow-100 text-yellow-700"
+                              ? "text-green-700"
+                              : "text-yellow-700"
                           }`}
                         >
-                          <span className="text-2xl font-bold">
-                            {t.type === "DEPOSIT" ? "+" : "-"}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="font-bold text-gray-900">{t.type}</p>
-                          <p className="text-sm text-gray-500">
-                            {formatDateTime(
-                              t.date || t.createdAt || Date.now()
-                            )}
-                          </p>
-                        </div>
+                          {t.type === "DEPOSIT" ? "+" : "-"}₹{" "}
+                          {t.amount.toLocaleString()}
+                        </p>
                       </div>
-                      <p
-                        className={`text-xl font-bold ${
-                          t.type === "DEPOSIT"
-                            ? "text-green-700"
-                            : "text-yellow-700"
-                        }`}
+                    ))}
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="flex items-center justify-center gap-2 mt-8">
+                      <button
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1 || loading}
+                        className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
                       >
-                        {t.type === "DEPOSIT" ? "+" : "-"}₹{" "}
-                        {t.amount.toLocaleString()}
-                      </p>
+                        ← Previous
+                      </button>
+
+                      <div className="flex items-center gap-2">
+                        {Array.from(
+                          { length: totalPages },
+                          (_, i) => i + 1
+                        ).map((page) => {
+                          // Show first page, last page, current page, and pages around current
+                          if (
+                            page === 1 ||
+                            page === totalPages ||
+                            (page >= currentPage - 1 && page <= currentPage + 1)
+                          ) {
+                            return (
+                              <button
+                                key={page}
+                                onClick={() => handlePageChange(page)}
+                                disabled={loading}
+                                className={`w-10 h-10 rounded-lg font-semibold transition ${
+                                  currentPage === page
+                                    ? "bg-gradient-to-r from-[#39b385] to-[#9be15d] text-white shadow-md"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                                } disabled:opacity-40`}
+                              >
+                                {page}
+                              </button>
+                            );
+                          } else if (
+                            page === currentPage - 2 ||
+                            page === currentPage + 2
+                          ) {
+                            return (
+                              <span key={page} className="text-gray-400">
+                                ...
+                              </span>
+                            );
+                          }
+                          return null;
+                        })}
+                      </div>
+
+                      <button
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages || loading}
+                        className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 font-semibold hover:bg-gray-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
+                      >
+                        Next →
+                      </button>
                     </div>
-                  ))}
-                </div>
+                  )}
+                </>
               )}
             </div>
           </div>
