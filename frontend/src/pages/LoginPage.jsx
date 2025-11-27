@@ -18,10 +18,19 @@ function LoginPage() {
 
   const handleSignIn = async () => {
     try {
-        if (!email || !password) {
-          toast.error("Please fill in all fields");
-          return;
-        }
+      // Validate that fields are not empty
+      if (!email || !password) {
+        toast.error("Please fill in all fields");
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        toast.error("Please enter a valid email address");
+        return;
+      }
+
       const result = await axios.post(
         `${API_CONFIG.baseURL}/api/auth/signin`,
         { email, password, role },
@@ -75,12 +84,15 @@ function LoginPage() {
               </label>
               <input
                 type="email"
+                id="email"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                 required
                 autoFocus
+                pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+                title="Please enter a valid email address"
               />
             </div>
 
@@ -95,11 +107,14 @@ function LoginPage() {
               <div className="relative">
                 <input
                   type={showPassword ? "text" : "password"}
+                  id="password"
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full border-2 border-gray-200 rounded-xl px-4 py-3 text-gray-900 focus:outline-none focus:border-[var(--color-primary)] transition"
                   required
+                  minLength={6}
+                  title="Password must be at least 6 characters long"
                 />
                 <button
                   type="button"
