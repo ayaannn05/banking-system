@@ -51,7 +51,6 @@ export const signUp = async (req, res) => {
           await acct.save();
         }
       } catch (acctErr) {
-        // Log but don't fail sign up if account creation has issues
         console.error("Failed to create account on signup:", acctErr.message);
       }
     }
@@ -72,13 +71,11 @@ export const signIn = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid password" });
     }
-    // role for redirection to correct dashboard if customer rederirect to customer dashboard
+    // role for redirection to correct dashboard, if customer redirect to customer dashboard
     if (role && user.role !== role) {
-      return res
-        .status(403)
-        .json({
-          message: `This is ${role} login only. ${role}s can log in here. Please use the correct login page.`,
-        });
+      return res.status(403).json({
+        message: `This is ${role} login only. ${role}s can log in here. Please use the correct login page.`,
+      });
     }
     const accessToken = generateAccessToken36();
     const tokenExpiresAt = new Date();
@@ -98,7 +95,7 @@ export const signIn = async (req, res) => {
 export const signOut = async (req, res) => {
   try {
     let user = req.user;
-    // If route wasn't protected for some reason, try to find user by token header
+
     if (!user) {
       const header = req.header("Authorization") || "";
       const token = header.startsWith("Bearer ") ? header.slice(7) : null;

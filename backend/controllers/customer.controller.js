@@ -25,7 +25,7 @@ export const getTransactions = async (req, res) => {
     const totalTransactions = allTransactions.length;
     const totalPages = Math.ceil(totalTransactions / limit);
 
-    // Sort transactions by date (newest first) and paginate
+    // Sorting
     const sortedTransactions = allTransactions.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
@@ -80,7 +80,7 @@ export const deposit = async (req, res) => {
 
     await account.save();
 
-    // sorting for latest transactions first at frontend
+    // sorting
     res.json({
       balance: account.balance,
       transactions: account.transactions.sort(

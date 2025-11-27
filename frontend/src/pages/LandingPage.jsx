@@ -7,7 +7,7 @@ export default function LandingPage() {
     <div className="w-full bg-white">
       <Nav showAuthButtons={true} />
 
-      {/* Hero Section - 100vh */}
+      {/* Hero Section */}
       <section className="mt-10 h-[70vh] flex items-center justify-center px-6 bg-gradient-to-br from-gray-50 via-white to-green-50/30">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-2 gap-16 items-center">
@@ -89,7 +89,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section - 70vh */}
+      {/* Features Section */}
       <section className="h-[60vh] flex items-center justify-center bg-gradient-to-br from-white via-gray-50 to-white px-6">
         <div className="max-w-7xl mx-auto w-full">
           <div className="text-center mb-16">
@@ -144,7 +144,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer - 30vh */}
+      {/* Footer */}
       <footer className="h-[40vh] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center px-6">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid md:grid-cols-4 gap-8 mb-8">

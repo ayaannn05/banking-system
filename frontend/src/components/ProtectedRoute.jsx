@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     const role = localStorage.getItem("role");
-    // Not logged in -> redirect to login
+    // Not logged -> in redirect to login
     if (!token) {
       navigate("/login", { state: { from: location }, replace: true });
       return;

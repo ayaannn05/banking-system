@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import formatDateTime from "../utils/formatDateTime";
 import { toast } from "react-toastify";
 import Nav from "../components/Nav";
+import { API_CONFIG } from "../config/api";
 
 function BankerDashboard() {
-  const serverUrl = "http://localhost:8000";
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -21,7 +21,7 @@ function BankerDashboard() {
     setLoading(true);
 
     try {
-      const res = await axios.get(`${serverUrl}/api/banker/accounts`, {
+      const res = await axios.get(`${API_CONFIG.baseURL}/api/banker/accounts`, {
         headers: getAuthHeaders(),
         withCredentials: true,
       });
@@ -46,7 +46,7 @@ function BankerDashboard() {
 
     try {
       await axios.post(
-        `${serverUrl}/api/auth/signout`,
+        `${API_CONFIG.baseURL}/api/auth/signout`,
         {},
         { headers: getAuthHeaders(), withCredentials: true }
       );

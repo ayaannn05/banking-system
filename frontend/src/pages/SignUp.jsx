@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import Nav from "../components/Nav";
+import { API_CONFIG } from "../config/api";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -16,12 +17,10 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const serverURL = "http://localhost:8000";
-
   const handleSignUp = async () => {
     try {
       await axios.post(
-        `${serverURL}/api/auth/signup`,
+        `${API_CONFIG.baseURL}/api/auth/signup`,
         {
           username: userName,
           email,

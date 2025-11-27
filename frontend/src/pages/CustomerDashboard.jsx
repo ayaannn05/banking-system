@@ -4,9 +4,9 @@ import { useNavigate } from "react-router-dom";
 import formatDateTime from "../utils/formatDateTime";
 import { toast } from "react-toastify";
 import Nav from "../components/Nav";
+import { API_CONFIG } from "../config/api";
 
 function CustomerDashboard() {
-  const serverUrl = "http://localhost:8000";
   const navigate = useNavigate();
   const [balance, setBalance] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -31,7 +31,7 @@ function CustomerDashboard() {
 
     try {
       const res = await axios.get(
-        `${serverUrl}/api/customer/transactions?page=${page}`,
+        `${API_CONFIG.baseURL}/api/customer/transactions?page=${page}`,
         {
           headers: getAuthHeaders(),
           withCredentials: true,
@@ -58,21 +58,15 @@ function CustomerDashboard() {
 
     try {
       await axios.post(
-        `${serverUrl}/api/auth/signout`,
+        `${API_CONFIG.baseURL}/api/auth/signout`,
         {},
         { headers: getAuthHeaders(), withCredentials: true }
       );
       toast.success("Signed out successfully!");
     } catch (error) {
-      if (error?.response?.status === 401) {
-        // token invalid or expired, continue to clear local state
-      } else {
-        toast.error(
-          error?.response?.data?.message ||
-            error.message ||
-            "Failed to sign out"
-        );
-      }
+      toast.error(
+        error?.response?.data?.message || error.message || "Failed to sign out"
+      );
     } finally {
       try {
         localStorage.removeItem("accessToken");
@@ -87,7 +81,6 @@ function CustomerDashboard() {
 
   useEffect(() => {
     fetchTransactions();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const postAction = async (path, value) => {
@@ -106,7 +99,7 @@ function CustomerDashboard() {
     setLoading(true);
     try {
       const res = await axios.post(
-        `${serverUrl}/api/customer/${path}`,
+        `${API_CONFIG.baseURL}/api/customer/${path}`,
         { amount: num },
         { headers: getAuthHeaders(), withCredentials: true }
       );

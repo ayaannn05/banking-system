@@ -3,7 +3,7 @@ import Account from "../models/account.model.js";
 export const listAccounts = async (req, res) => {
   try {
     // Populate user info: name, email, username
-    // Support optional sorting via query params: ?sortBy=balance&order=asc
+
     const { sortBy, order } = req.query;
     const sortObj = {};
     if (sortBy) {

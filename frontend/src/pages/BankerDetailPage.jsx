@@ -4,11 +4,10 @@ import axios from "axios";
 import formatDateTime from "../utils/formatDateTime";
 import { toast } from "react-toastify";
 import Nav from "../components/Nav";
-
+import { API_CONFIG } from "../config/api";
 export default function BankerDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const serverUrl = "http://localhost:8000";
 
   const [account, setAccount] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -26,7 +25,7 @@ export default function BankerDetailPage() {
 
     try {
       const res = await axios.get(
-        `${serverUrl}/api/banker/accounts/${id}/transactions?page=${page}`,
+        `${API_CONFIG.baseURL}/api/banker/accounts/${id}/transactions?page=${page}`,
         { headers: getAuthHeaders(), withCredentials: true }
       );
       setAccount(res.data.account || null);
@@ -51,7 +50,6 @@ export default function BankerDetailPage() {
   useEffect(() => {
     if (!id) return navigate("/banker-dashboard");
     fetchDetail();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handlePageChange = (newPage) => {

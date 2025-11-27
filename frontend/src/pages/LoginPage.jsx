@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Nav from "../components/Nav";
+import { API_CONFIG } from "../config/api";
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,7 +12,6 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const serverUrl = "http://localhost:8000";
   const location = useLocation();
   const initialRole = location?.state?.role || "customer";
   const [role] = useState(initialRole);
@@ -19,7 +19,7 @@ function LoginPage() {
   const handleSignIn = async () => {
     try {
       const result = await axios.post(
-        `${serverUrl}/api/auth/signin`,
+        `${API_CONFIG.baseURL}/api/auth/signin`,
         { email, password, role },
         { withCredentials: true }
       );
