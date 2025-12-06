@@ -36,7 +36,10 @@ function CustomerDashboard() {
           headers: getAuthHeaders(),
           withCredentials: true,
         }
+     
       );
+    
+      
       setBalance(res.data.balance);
       setTransactions(res.data.transactions || []);
       setCurrentPage(res.data.currentPage || 1);
@@ -103,6 +106,7 @@ function CustomerDashboard() {
         { amount: num },
         { headers: getAuthHeaders(), withCredentials: true }
       );
+      console.log(res.data);
       setBalance(res.data.balance);
       setTransactions(res.data.transactions || []);
       toast.success(
@@ -122,7 +126,7 @@ function CustomerDashboard() {
   };
 
   const openModal = (type) => {
-    // If attempting to withdraw but there's no balance, show a toast and do not open modal
+  
     if (type === "withdraw") {
       if (balance === null || balance <= 0) {
         toast.error("Insufficient balance");
